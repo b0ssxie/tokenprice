@@ -1,0 +1,51 @@
+[
+  {
+    "featured": true,
+    "name": "⚡ OpenCode Go",
+    "price": "$10/月 · $5/首月",
+    "models": "可用模型 (12+): GLM-5.1, Kimi K2.6, MiMo V2.5-Pro, Qwen3.6 Plus, MiniMax M2.7, DeepSeek V4 Pro, DeepSeek V4 Flash 等",
+    "extra": "额度: 慷慨额度 · 可充值 · 任意 Agent",
+    "link": "https://opencode.ai/go?ref=X1E3T8TFJZ",
+    "linkText": "试用 Go →"
+  },
+  {
+    "name": "🧠 智谱AI",
+    "price": "¥49/月起",
+    "models": "GLM-5.2, GLM-5-Turbo, GLM-4.7",
+    "extra": "Lite ¥49 · Pro ¥149 · Max ¥469 · 80~1600 次/5h",
+    "link": "https://bigmodel.cn/pricing",
+    "linkText": "查看 →"
+  },
+  {
+    "name": "💠 MiniMax",
+    "price": "¥49/月起",
+    "models": "MiniMax-M3, M2.7 等全平台模型",
+    "extra": "Plus ¥49 · Max ¥119 · Ultra ¥469",
+    "link": "https://platform.minimaxi.com",
+    "linkText": "查看 →"
+  },
+  {
+    "name": "🔥 讯飞·星火",
+    "price": "¥3.9/月起",
+    "models": "DeepSeek-V3.2, GLM-5, Qwen3.5, Kimi-K2.5 等 70+ 模型",
+    "extra": "无忧版 ¥3.9 · 专业版 ¥39 · 高效版 ¥199",
+    "link": "https://xinghuo.xfyun.cn/pricing",
+    "linkText": "查看 →"
+  },
+  {
+    "name": "🌙 Kimi",
+    "price": "¥49/月起",
+    "models": "Kimi K3 (1M ctx), K2.7 Code (256K ctx)",
+    "extra": "Andante ¥49 · Moderato ¥99 · Allegretto ¥199",
+    "link": "https://kimi.com/membership/pricing",
+    "linkText": "查看 →"
+  },
+  {
+    "name": "📦 字节·火山方舟",
+    "price": "¥40/月起",
+    "models": "Doubao-Seed-2.0, DeepSeek-V3.2, GLM-4.7, Kimi-K2.5 等",
+    "extra": "Lite ¥40 (活动 ¥9.9) · Pro ¥200 (活动 ¥49.9)",
+    "link": "https://www.volcengine.com/docs/82379/1925114",
+    "linkText": "查看 →"
+  }
+]

@@ -1,5 +1,6 @@
 import './style.css';
 import modelsData from './data/models.json';
+import plansData from './data/plans.json';
 
 const POPULAR_IDS = [
   'openai/gpt-4o', 'openai/gpt-4o-mini', 'openai/o3', 'openai/o4-mini',
@@ -207,7 +208,19 @@ document.querySelectorAll('#tabAll th[data-sort]').forEach(th => {
     const dd = document.getElementById('sortBy');
     const optVal = allState.sortDir === 'asc' ? allState.sortBy : allState.sortBy + '-desc';
     if ([...dd.options].some(o => o.value === optVal)) dd.value = optVal;
-    renderAll();
+// Render plans
+const plansContainer = document.getElementById('plansContainer');
+plansContainer.innerHTML = plansData.map(p => `
+  <div class="plan${p.featured ? ' featured' : ''}">
+    <div class="plan-name">${p.name}</div>
+    <div class="plan-price"><span class="price-num">${p.price}</span></div>
+    <div class="plan-models">${p.models}</div>
+    <div class="plan-extra">${p.extra}</div>
+    <a class="plan-link" href="${p.link}" target="_blank" rel="noopener">${p.linkText}</a>
+  </div>
+`).join('');
+
+renderAll();
   });
 });
 
