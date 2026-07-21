@@ -1,0 +1,9 @@
+{
+  "name": "ai-token-prices",
+  "version": "1.0.0",
+  "description": "AI 模型价格对比 - Token 价格、上下文窗口对比",
+  "type": "module",
+  "scripts": {
+    "build": "node src/fetch-prices.js"
+  }
+}
