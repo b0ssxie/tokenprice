@@ -1,0 +1,116 @@
+### Task 3: 创建 index.html（Vite 入口）
+
+**Files:**
+- Create: `index.html`（在项目根目录）
+
+**Interfaces:**
+- Consumes: `src/main.js` (ES module)
+- Produces: Vite 入口页面
+
+- [ ] **Step 1: 创建 index.html**
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 模型价格对比 - Token 价格、上下文窗口对比</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+<div id="app">
+  <header class="hero">
+    <div class="hero-content">
+      <h1>AI 模型比价</h1>
+      <p class="hero-subtitle">对比 Token 价格 · 上下文窗口 · 模型能力</p>
+      <p class="hero-meta">数据来源: <a href="https://openrouter.ai" target="_blank">OpenRouter</a> · 每日更新</p>
+    </div>
+  </header>
+
+  <section class="stats-row" id="statsRow">
+    <div class="stat-card" id="statCheapest">
+      <div class="stat-value">--</div>
+      <div class="stat-label">最低价模型</div>
+      <div class="stat-detail" id="statCheapestDetail"></div>
+    </div>
+    <div class="stat-card" id="statMaxCtx">
+      <div class="stat-value">--</div>
+      <div class="stat-label">最多上下文</div>
+      <div class="stat-detail" id="statMaxCtxDetail"></div>
+    </div>
+    <div class="stat-card" id="statCount">
+      <div class="stat-value" id="statCountValue">0</div>
+      <div class="stat-label">模型总数</div>
+      <div class="stat-detail">每日更新</div>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="all">所有模型</button>
+    <button class="tab" data-tab="popular">热门</button>
+    <button class="tab" data-tab="plans">套餐对比</button>
+  </nav>
+
+  <div class="controls">
+    <div class="control-group">
+      <select id="filterPlatform">
+        <option value="全部">平台: 全部</option>
+      </select>
+      <select id="filterContext">
+        <option value="0">上下文: 不限</option>
+        <option value="8192">8K+</option>
+        <option value="16384">16K+</option>
+        <option value="32768">32K+</option>
+        <option value="65536">64K+</option>
+        <option value="131072">128K+</option>
+        <option value="1048576">1M+</option>
+      </select>
+      <select id="sortBy">
+        <option value="avg">排序: 均价 ↑</option>
+        <option value="avg-desc">均价 ↓</option>
+        <option value="contextLength">上下文 ↑</option>
+        <option value="contextLength-desc">上下文 ↓</option>
+        <option value="name">名称 A-Z</option>
+        <option value="name-desc">名称 Z-A</option>
+        <option value="created">最新</option>
+        <option value="created-desc">最旧</option>
+      </select>
+      <input type="search" id="search" placeholder="搜索模型名称或 ID...">
+    </div>
+    <span class="stats-badge" id="statsBadge">0 个模型</span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="modelTable">
+      <thead>
+        <tr>
+          <th data-sort="name">模型 <span class="sort-arrow">▼</span></th>
+          <th data-sort="platform">平台 <span class="sort-arrow">▼</span></th>
+          <th data-sort="inputPrice" class="num">输入价/百万 <span class="sort-arrow">▼</span></th>
+          <th data-sort="outputPrice" class="num">输出价/百万 <span class="sort-arrow">▼</span></th>
+          <th data-sort="avg" class="num sorted">均价/百万 <span class="sort-arrow">▲</span></th>
+          <th data-sort="contextLength" class="num">上下文 <span class="sort-arrow">▼</span></th>
+          <th data-sort="modality" class="center">模态 <span class="sort-arrow">▼</span></th>
+          <th data-sort="created" class="center">发布 <span class="sort-arrow">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <p>Data from <a href="https://openrouter.ai" target="_blank">OpenRouter</a> · 每日自动更新</p>
+  </footer>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
+```
+
+- [ ] **Step 2: 提交**
+
+```bash
+git add index.html
+git commit -m "feat: 创建 Vite 入口 index.html"
+```

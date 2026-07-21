@@ -1,0 +1,66 @@
+### Task 6: 更新 GitHub Actions workflow
+
+**Files:**
+- Modify: `.github/workflows/deploy.yml`
+
+**Interfaces:**
+- Consumes: 构建命令改为 `npm run build`（内部执行 fetch + vite build）
+- Produces: Pages 部署
+
+- [ ] **Step 1: 覆盖 deploy.yml**
+
+将 `.github/workflows/deploy.yml` 内容完全替换为：
+
+```yaml
+name: 每日更新价格并部署到 Pages
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: 安装依赖
+        run: npm ci
+      - name: 抓取数据并构建
+        run: npm run build
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+- [ ] **Step 2: 提交**
+
+```bash
+git add .github/workflows/deploy.yml
+git commit -m "ci: 更新 workflow 适应 Vite 构建"
+```
