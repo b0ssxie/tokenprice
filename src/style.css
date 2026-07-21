@@ -214,41 +214,59 @@ td.center { text-align: center; }
   color: var(--orange);
 }
 
-/* Plans grid */
-.plans-intro { text-align: center; color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; }
-.plans-grid {
+/* Plans */
+.plans {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
 }
-.plan-card {
+.plan {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
   transition: border-color 0.2s, transform 0.2s;
 }
-.plan-card:hover {
+.plan:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
 }
-.plan-name { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
-.plan-price { font-size: 15px; font-weight: 600; color: var(--accent); }
-.plan-unit { font-size: 11px; color: var(--text-muted); font-weight: 400; }
-.plan-features { margin-top: 12px; list-style: none; }
-.plan-features li {
-  font-size: 12px; color: var(--text-secondary);
-  padding: 3px 0;
+.plan.featured {
+  border-color: var(--accent);
   position: relative;
-  padding-left: 14px;
 }
-.plan-features li::before {
-  content: '✓';
-  position: absolute; left: 0;
-  color: var(--green);
+.plan.featured::before {
+  content: '推荐';
+  position: absolute;
+  top: -10px; right: 16px;
+  background: linear-gradient(135deg, var(--accent), #764ba2);
+  color: white;
+  padding: 2px 14px;
+  border-radius: 20px;
   font-size: 11px;
+  font-weight: 600;
 }
+.plan-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.plan-price { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
+.plan-price .price-num { font-size: 22px; font-weight: 700; color: var(--accent); }
+.plan-models { font-size: 13px; color: var(--text-primary); margin-bottom: 8px; flex: 1; line-height: 1.5; }
+.plan-extra { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+.plan-link {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent), #764ba2);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  transition: opacity 0.2s;
+}
+.plan-link:hover { opacity: 0.85; }
 
 /* Footer */
 footer {

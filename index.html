@@ -161,69 +161,48 @@
   </div>
 
   <div class="tab-content" id="tabPlans" style="display:none">
-    <div class="plans-intro">
-      <p>各平台套餐 &amp; API 定价速览。价格为官方美元标价，按百万 Token 计算。</p>
-    </div>
-    <div class="plans-grid" id="plansGrid">
-      <div class="plan-card">
-        <div class="plan-name">OpenAI</div>
-        <div class="plan-price">$2.50<span class="plan-unit"> / 百万输入</span></div>
-        <div class="plan-price">$10.00<span class="plan-unit"> / 百万输出</span></div>
-        <ul class="plan-features">
-          <li>GPT-4o / 4o-mini / o3 / o4-mini</li>
-          <li>128K 上下文</li>
-          <li>支持多模态、Function Calling</li>
-        </ul>
+    <div class="plans">
+      <div class="plan featured">
+        <div class="plan-name">⚡ OpenCode Go</div>
+        <div class="plan-price"><span class="price-num">$10</span>/月 · $5/首月</div>
+        <div class="plan-models">可用模型 (12+): GLM-5.1, Kimi K2.6, MiMo V2.5-Pro, Qwen3.6 Plus, MiniMax M2.7, DeepSeek V4 Pro, DeepSeek V4 Flash 等</div>
+        <div class="plan-extra">额度: 慷慨额度 · 可充值 · 任意 Agent</div>
+        <a class="plan-link" href="https://opencode.ai/go?ref=X1E3T8TFJZ">试用 Go →</a>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">Anthropic</div>
-        <div class="plan-price">$3.00<span class="plan-unit"> / 百万输入</span></div>
-        <div class="plan-price">$15.00<span class="plan-unit"> / 百万输出</span></div>
-        <ul class="plan-features">
-          <li>Claude 4 Sonnet / Claude 3.5 Sonnet / Haiku</li>
-          <li>200K 上下文</li>
-          <li>支持多模态、PDF 理解</li>
-        </ul>
+      <div class="plan">
+        <div class="plan-name">🧠 智谱AI</div>
+        <div class="plan-price"><span class="price-num">¥49</span>/月 · ¥46.55/首月</div>
+        <div class="plan-models">GLM-5.1, GLM-5-Turbo</div>
+        <div class="plan-extra">月请求: 24,000 次 · 5h限制: 1,200 次</div>
+        <a class="plan-link" href="https://open.bigmodel.cn">查看 →</a>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">Google</div>
-        <div class="plan-price">$1.25<span class="plan-unit"> / 百万输入</span></div>
-        <div class="plan-price">$5.00<span class="plan-unit"> / 百万输出</span></div>
-        <ul class="plan-features">
-          <li>Gemini 2.5 Pro / Flash / 2.0 Flash</li>
-          <li>1M+ 上下文</li>
-          <li>多模态、原生工具调用</li>
-        </ul>
+      <div class="plan">
+        <div class="plan-name">💠 MiniMax</div>
+        <div class="plan-price"><span class="price-num">¥29</span>/月 · ¥26.1/首月</div>
+        <div class="plan-models">MiniMax-M2.7, MiniMax-M2.5</div>
+        <div class="plan-extra">月请求: 24,000 次 · 5h限制: 600 次</div>
+        <a class="plan-link" href="https://www.minimaxi.com">查看 →</a>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">DeepSeek</div>
-        <div class="plan-price">$0.27<span class="plan-unit"> / 百万输入</span></div>
-        <div class="plan-price">$1.10<span class="plan-unit"> / 百万输出</span></div>
-        <ul class="plan-features">
-          <li>DeepSeek-V3 / R1</li>
-          <li>128K 上下文</li>
-          <li>高性价比，开源模型</li>
-        </ul>
+      <div class="plan">
+        <div class="plan-name">🔥 讯飞·星火</div>
+        <div class="plan-price"><span class="price-num">¥39</span>/月</div>
+        <div class="plan-models">GLM-5.1, Qwen-3.5-Plus, MiniMax-M2.5, Kimi-K2.5, DeepSeek-V3.2</div>
+        <div class="plan-extra">月请求: 18,000 次 · 5h限制: 1,200 次</div>
+        <a class="plan-link" href="https://xinghuo.xfyun.cn">查看 →</a>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">Mistral</div>
-        <div class="plan-price">$0.15<span class="plan-unit"> / 百万输入</span></div>
-        <div class="plan-price">$0.60<span class="plan-unit"> / 百万输出</span></div>
-        <ul class="plan-features">
-          <li>Mistral Large / Small / Codestral</li>
-          <li>128K 上下文</li>
-          <li>支持多模态、函数调用</li>
-        </ul>
+      <div class="plan">
+        <div class="plan-name">🌙 Kimi</div>
+        <div class="plan-price"><span class="price-num">¥49</span>/月</div>
+        <div class="plan-models">Kimi-K2.6, Kimi-K2.5, Kimi-K2</div>
+        <div class="plan-extra">月请求: 未公开 · Agent 4 倍速</div>
+        <a class="plan-link" href="https://kimi.moonshot.cn">查看 →</a>
       </div>
-      <div class="plan-card">
-        <div class="plan-name">xAI</div>
-        <div class="plan-price">$2.00<span class="plan-unit"> / 百万输入</span></div>
-        <div class="plan-price">$10.00<span class="plan-unit"> / 百万输出</span></div>
-        <ul class="plan-features">
-          <li>Grok-3 / Grok-3 Mini / Grok-2</li>
-          <li>131K 上下文</li>
-          <li>多模态、实时信息</li>
-        </ul>
+      <div class="plan">
+        <div class="plan-name">📦 字节·方舟</div>
+        <div class="plan-price"><span class="price-num">¥40</span>/月 · ¥36/首月</div>
+        <div class="plan-models">Doubao-Seed-2.0, MiniMax-M2.7, Kimi-K2.6, GLM-5.1, DeepSeek-V3.2</div>
+        <div class="plan-extra">月请求: 18,000 次 · 已开始限购</div>
+        <a class="plan-link" href="https://console.volcengine.com/ark">查看 →</a>
       </div>
     </div>
   </div>
