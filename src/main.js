@@ -208,19 +208,7 @@ document.querySelectorAll('#tabAll th[data-sort]').forEach(th => {
     const dd = document.getElementById('sortBy');
     const optVal = allState.sortDir === 'asc' ? allState.sortBy : allState.sortBy + '-desc';
     if ([...dd.options].some(o => o.value === optVal)) dd.value = optVal;
-// Render plans
-const plansContainer = document.getElementById('plansContainer');
-plansContainer.innerHTML = plansData.map(p => `
-  <div class="plan${p.featured ? ' featured' : ''}">
-    <div class="plan-name">${p.name}</div>
-    <div class="plan-price"><span class="price-num">${p.price}</span></div>
-    <div class="plan-models">${p.models}</div>
-    <div class="plan-extra">${p.extra}</div>
-    <a class="plan-link" href="${p.link}" target="_blank" rel="noopener">${p.linkText}</a>
-  </div>
-`).join('');
-
-renderAll();
+    renderAll();
   });
 });
 
@@ -253,5 +241,17 @@ document.querySelectorAll('#tabPopular th[data-sort]').forEach(th => {
     renderPopular();
   });
 });
+
+// Render plans
+const plansContainer = document.getElementById('plansContainer');
+plansContainer.innerHTML = plansData.map(p => `
+  <div class="plan${p.featured ? ' featured' : ''}">
+    <div class="plan-name">${p.name}</div>
+    <div class="plan-price"><span class="price-num">${p.price}</span></div>
+    <div class="plan-models">${p.models}</div>
+    <div class="plan-extra">${p.extra}</div>
+    <a class="plan-link" href="${p.link}" target="_blank" rel="noopener">${p.linkText}</a>
+  </div>
+`).join('');
 
 renderAll();
