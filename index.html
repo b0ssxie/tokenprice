@@ -69,22 +69,163 @@
     <span class="stats-badge" id="statsBadge">0 个模型</span>
   </div>
 
-  <div class="table-wrap">
-    <table id="modelTable">
-      <thead>
-        <tr>
-          <th data-sort="name">模型 <span class="sort-arrow">▼</span></th>
-          <th data-sort="platform">平台 <span class="sort-arrow">▼</span></th>
-          <th data-sort="inputPrice" class="num">输入价/百万 <span class="sort-arrow">▼</span></th>
-          <th data-sort="outputPrice" class="num">输出价/百万 <span class="sort-arrow">▼</span></th>
-          <th data-sort="avg" class="num sorted">均价/百万 <span class="sort-arrow">▲</span></th>
-          <th data-sort="contextLength" class="num">上下文 <span class="sort-arrow">▼</span></th>
-          <th data-sort="modality" class="center">模态 <span class="sort-arrow">▼</span></th>
-          <th data-sort="created" class="center">发布 <span class="sort-arrow">▼</span></th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+  <div class="tab-content" id="tabAll">
+    <div class="controls">
+      <div class="control-group">
+        <select id="filterPlatform">
+          <option value="全部">平台: 全部</option>
+        </select>
+        <select id="filterContext">
+          <option value="0">上下文: 不限</option>
+          <option value="8192">8K+</option>
+          <option value="16384">16K+</option>
+          <option value="32768">32K+</option>
+          <option value="65536">64K+</option>
+          <option value="131072">128K+</option>
+          <option value="1048576">1M+</option>
+        </select>
+        <select id="sortBy">
+          <option value="avg">排序: 均价 ↑</option>
+          <option value="avg-desc">均价 ↓</option>
+          <option value="contextLength">上下文 ↑</option>
+          <option value="contextLength-desc">上下文 ↓</option>
+          <option value="name">名称 A-Z</option>
+          <option value="name-desc">名称 Z-A</option>
+          <option value="created">最新</option>
+          <option value="created-desc">最旧</option>
+        </select>
+        <input type="search" id="search" placeholder="搜索模型名称或 ID...">
+      </div>
+      <span class="stats-badge" id="statsBadge">0 个模型</span>
+    </div>
+
+    <div class="table-wrap">
+      <table id="modelTable">
+        <thead>
+          <tr>
+            <th data-sort="name">模型 <span class="sort-arrow">▼</span></th>
+            <th data-sort="platform">平台 <span class="sort-arrow">▼</span></th>
+            <th data-sort="inputPrice" class="num">输入价/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="outputPrice" class="num">输出价/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="avg" class="num sorted">均价/百万 <span class="sort-arrow">▲</span></th>
+            <th data-sort="contextLength" class="num">上下文 <span class="sort-arrow">▼</span></th>
+            <th data-sort="modality" class="center">模态 <span class="sort-arrow">▼</span></th>
+            <th data-sort="created" class="center">发布 <span class="sort-arrow">▼</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tabPopular" style="display:none">
+    <div class="controls">
+      <div class="control-group">
+        <select id="popularFilterContext">
+          <option value="0">上下文: 不限</option>
+          <option value="8192">8K+</option>
+          <option value="16384">16K+</option>
+          <option value="32768">32K+</option>
+          <option value="65536">64K+</option>
+          <option value="131072">128K+</option>
+          <option value="1048576">1M+</option>
+        </select>
+        <select id="popularSortBy">
+          <option value="avg">排序: 均价 ↑</option>
+          <option value="avg-desc">均价 ↓</option>
+          <option value="contextLength">上下文 ↑</option>
+          <option value="contextLength-desc">上下文 ↓</option>
+          <option value="name">名称 A-Z</option>
+          <option value="name-desc">名称 Z-A</option>
+        </select>
+      </div>
+      <span class="stats-badge" id="popularStatsBadge">0 个模型</span>
+    </div>
+
+    <div class="table-wrap">
+      <table id="popularTable">
+        <thead>
+          <tr>
+            <th data-sort="name">模型 <span class="sort-arrow">▼</span></th>
+            <th data-sort="platform">平台 <span class="sort-arrow">▼</span></th>
+            <th data-sort="inputPrice" class="num">输入价/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="outputPrice" class="num">输出价/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="avg" class="num sorted">均价/百万 <span class="sort-arrow">▲</span></th>
+            <th data-sort="contextLength" class="num">上下文 <span class="sort-arrow">▼</span></th>
+            <th data-sort="modality" class="center">模态 <span class="sort-arrow">▼</span></th>
+          </tr>
+        </thead>
+        <tbody id="popularBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tabPlans" style="display:none">
+    <div class="plans-intro">
+      <p>各平台套餐 &amp; API 定价速览。价格为官方美元标价，按百万 Token 计算。</p>
+    </div>
+    <div class="plans-grid" id="plansGrid">
+      <div class="plan-card">
+        <div class="plan-name">OpenAI</div>
+        <div class="plan-price">$2.50<span class="plan-unit"> / 百万输入</span></div>
+        <div class="plan-price">$10.00<span class="plan-unit"> / 百万输出</span></div>
+        <ul class="plan-features">
+          <li>GPT-4o / 4o-mini / o3 / o4-mini</li>
+          <li>128K 上下文</li>
+          <li>支持多模态、Function Calling</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Anthropic</div>
+        <div class="plan-price">$3.00<span class="plan-unit"> / 百万输入</span></div>
+        <div class="plan-price">$15.00<span class="plan-unit"> / 百万输出</span></div>
+        <ul class="plan-features">
+          <li>Claude 4 Sonnet / Claude 3.5 Sonnet / Haiku</li>
+          <li>200K 上下文</li>
+          <li>支持多模态、PDF 理解</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Google</div>
+        <div class="plan-price">$1.25<span class="plan-unit"> / 百万输入</span></div>
+        <div class="plan-price">$5.00<span class="plan-unit"> / 百万输出</span></div>
+        <ul class="plan-features">
+          <li>Gemini 2.5 Pro / Flash / 2.0 Flash</li>
+          <li>1M+ 上下文</li>
+          <li>多模态、原生工具调用</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">DeepSeek</div>
+        <div class="plan-price">$0.27<span class="plan-unit"> / 百万输入</span></div>
+        <div class="plan-price">$1.10<span class="plan-unit"> / 百万输出</span></div>
+        <ul class="plan-features">
+          <li>DeepSeek-V3 / R1</li>
+          <li>128K 上下文</li>
+          <li>高性价比，开源模型</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Mistral</div>
+        <div class="plan-price">$0.15<span class="plan-unit"> / 百万输入</span></div>
+        <div class="plan-price">$0.60<span class="plan-unit"> / 百万输出</span></div>
+        <ul class="plan-features">
+          <li>Mistral Large / Small / Codestral</li>
+          <li>128K 上下文</li>
+          <li>支持多模态、函数调用</li>
+        </ul>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">xAI</div>
+        <div class="plan-price">$2.00<span class="plan-unit"> / 百万输入</span></div>
+        <div class="plan-price">$10.00<span class="plan-unit"> / 百万输出</span></div>
+        <ul class="plan-features">
+          <li>Grok-3 / Grok-3 Mini / Grok-2</li>
+          <li>131K 上下文</li>
+          <li>多模态、实时信息</li>
+        </ul>
+      </div>
+    </div>
   </div>
 
   <footer>

@@ -1,7 +1,17 @@
 import './style.css';
 import modelsData from './data/models.json';
 
-const MODELS = modelsData;
+const POPULAR_IDS = [
+  'openai/gpt-4o', 'openai/gpt-4o-mini', 'openai/o3', 'openai/o4-mini',
+  'anthropic/claude-sonnet-4', 'anthropic/claude-sonnet-4.5', 'anthropic/claude-sonnet-4.6',
+  'google/gemini-2.5-pro', 'google/gemini-2.5-flash',
+  'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
+  'mistralai/mistral-large-2512', 'mistralai/mistral-small-3.1-24b-instruct',
+  'cohere/command-r-plus-08-2024', 'cohere/command-r-08-2024',
+  'qwen/qwen-2.5-72b-instruct', 'meta-llama/llama-3.1-70b-instruct',
+];
+
+const POPULAR = modelsData.filter(m => POPULAR_IDS.includes(m.id));
 
 function priceClass(val) {
   const n = parseFloat(val);
@@ -16,7 +26,6 @@ function getPlatformClass(platform) {
   return `platform-badge ${cls}`;
 }
 
-// Stats cards
 function updateStats(filtered) {
   if (filtered.length === 0) {
     document.getElementById('statCheapest').querySelector('.stat-value').textContent = '--';
@@ -37,58 +46,26 @@ function updateStats(filtered) {
   countEl.textContent = String(filtered.length);
 }
 
-// Init filter platform options
-const platforms = [...new Set(MODELS.map(m => m.platform))].sort();
-const platformSelect = document.getElementById('filterPlatform');
-platforms.forEach(p => {
-  const opt = document.createElement('option');
-  opt.value = p;
-  opt.textContent = p;
-  platformSelect.appendChild(opt);
-});
-
-const state = {
-  filterPlatform: '全部',
-  filterContext: 0,
-  search: '',
-  sortBy: 'avg',
-  sortDir: 'asc',
-};
-
-function render() {
-  let filtered = [...MODELS];
-
-  if (state.filterPlatform !== '全部') {
-    filtered = filtered.filter(m => m.platform === state.filterPlatform);
-  }
-  if (state.filterContext > 0) {
-    filtered = filtered.filter(m => m.contextLength >= state.filterContext);
-  }
-  if (state.search) {
-    const q = state.search.toLowerCase();
-    filtered = filtered.filter(m => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q));
-  }
-
-  filtered.sort((a, b) => {
+function renderTableBody(data, tbodyId, badgeId, sortBy, sortDir, showCreated) {
+  const sorted = [...data];
+  sorted.sort((a, b) => {
     let cmp = 0;
-    switch (state.sortBy) {
+    switch (sortBy) {
       case 'avg': cmp = parseFloat(a.avg) - parseFloat(b.avg); break;
       case 'inputPrice': cmp = parseFloat(a.inputPrice) - parseFloat(b.inputPrice); break;
       case 'outputPrice': cmp = parseFloat(a.outputPrice) - parseFloat(b.outputPrice); break;
       case 'contextLength': cmp = a.contextLength - b.contextLength; break;
       case 'name': cmp = a.name.localeCompare(b.name); break;
       case 'platform': cmp = a.platform.localeCompare(b.platform); break;
-      case 'created': cmp = a.created - b.created; break;
       case 'modality': cmp = a.modality.localeCompare(b.modality); break;
     }
-    return state.sortDir === 'asc' ? cmp : -cmp;
+    return sortDir === 'asc' ? cmp : -cmp;
   });
 
-  document.getElementById('statsBadge').textContent = `${filtered.length} 个模型`;
-  updateStats(filtered);
+  if (badgeId) document.getElementById(badgeId).textContent = `${sorted.length} 个模型`;
 
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = filtered.map((m, i) => {
+  const tbody = document.getElementById(tbodyId);
+  tbody.innerHTML = sorted.map((m, i) => {
     const avgClass = priceClass(m.avg);
     const platformClass = getPlatformClass(m.platform);
     const modalityHtml = m.modality === '多模态'
@@ -102,22 +79,80 @@ function render() {
       <td class="num ${avgClass}"><strong>$${m.avg}</strong></td>
       <td class="num">${m.contextLabel}</td>
       <td class="center">${modalityHtml}</td>
-      <td class="center" style="color:var(--text-muted);font-size:12px;">${m.createdLabel}</td>
+      ${showCreated && m.createdLabel ? `<td class="center" style="color:var(--text-muted);font-size:12px;">${m.createdLabel}</td>` : ''}
     </tr>`;
   }).join('');
+}
 
-  // Update sort arrows
-  document.querySelectorAll('th .sort-arrow').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('th[data-sort]').forEach(th => {
-    if (th.dataset.sort === state.sortBy) {
+// Init platform options
+const platforms = [...new Set(modelsData.map(m => m.platform))].sort();
+const platformSelect = document.getElementById('filterPlatform');
+platforms.forEach(p => {
+  const opt = document.createElement('option');
+  opt.value = p;
+  opt.textContent = p;
+  platformSelect.appendChild(opt);
+});
+
+// State: all models tab
+const allState = {
+  filterPlatform: '全部',
+  filterContext: 0,
+  search: '',
+  sortBy: 'avg',
+  sortDir: 'asc',
+};
+
+// State: popular tab
+const popState = {
+  filterContext: 0,
+  sortBy: 'avg',
+  sortDir: 'asc',
+};
+
+function renderAll() {
+  let filtered = [...modelsData];
+  if (allState.filterPlatform !== '全部') {
+    filtered = filtered.filter(m => m.platform === allState.filterPlatform);
+  }
+  if (allState.filterContext > 0) {
+    filtered = filtered.filter(m => m.contextLength >= allState.filterContext);
+  }
+  if (allState.search) {
+    const q = allState.search.toLowerCase();
+    filtered = filtered.filter(m => m.name.toLowerCase().includes(q) || m.id.toLowerCase().includes(q));
+  }
+  document.getElementById('statsBadge').textContent = `${filtered.length} 个模型`;
+  updateStats(filtered);
+  renderTableBody(filtered, 'tableBody', null, allState.sortBy, allState.sortDir, true);
+
+  document.querySelectorAll('#tabAll th .sort-arrow').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('#tabAll th[data-sort]').forEach(th => {
+    if (th.dataset.sort === allState.sortBy) {
       const arrow = th.querySelector('.sort-arrow');
       arrow.classList.add('active');
-      arrow.textContent = state.sortDir === 'asc' ? '▲' : '▼';
+      arrow.textContent = allState.sortDir === 'asc' ? '▲' : '▼';
     }
   });
 }
 
-// Debounce helper
+function renderPopular() {
+  let filtered = [...POPULAR];
+  if (popState.filterContext > 0) {
+    filtered = filtered.filter(m => m.contextLength >= popState.filterContext);
+  }
+  renderTableBody(filtered, 'popularBody', 'popularStatsBadge', popState.sortBy, popState.sortDir, false);
+
+  document.querySelectorAll('#tabPopular th .sort-arrow').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('#tabPopular th[data-sort]').forEach(th => {
+    if (th.dataset.sort === popState.sortBy) {
+      const arrow = th.querySelector('.sort-arrow');
+      arrow.classList.add('active');
+      arrow.textContent = popState.sortDir === 'asc' ? '▲' : '▼';
+    }
+  });
+}
+
 function debounce(fn, ms) {
   let timer;
   return (...args) => {
@@ -126,42 +161,84 @@ function debounce(fn, ms) {
   };
 }
 
-// Event listeners
+// Tab switching
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    const target = document.getElementById(`tab${btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1)}`);
+    if (target) target.style.display = '';
+    if (btn.dataset.tab === 'popular') renderPopular();
+  });
+});
+
+// All tab events
 document.getElementById('filterPlatform').addEventListener('change', e => {
-  state.filterPlatform = e.target.value;
-  render();
+  allState.filterPlatform = e.target.value;
+  renderAll();
 });
 document.getElementById('filterContext').addEventListener('change', e => {
-  state.filterContext = parseInt(e.target.value);
-  render();
+  allState.filterContext = parseInt(e.target.value);
+  renderAll();
 });
 document.getElementById('search').addEventListener('input', debounce(e => {
-  state.search = e.target.value;
-  render();
+  allState.search = e.target.value;
+  renderAll();
 }, 300));
 document.getElementById('sortBy').addEventListener('change', e => {
   const v = e.target.value;
   const parts = v.split('-');
-  state.sortBy = parts[0];
-  state.sortDir = parts[1] === 'desc' ? 'desc' : 'asc';
-  render();
+  allState.sortBy = parts[0];
+  allState.sortDir = parts[1] === 'desc' ? 'desc' : 'asc';
+  renderAll();
 });
 
-// Column header click sorting
-document.querySelectorAll('th[data-sort]').forEach(th => {
+// All tab column header click sorting
+document.querySelectorAll('#tabAll th[data-sort]').forEach(th => {
   th.addEventListener('click', () => {
     const key = th.dataset.sort;
-    if (state.sortBy === key) {
-      state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+    if (allState.sortBy === key) {
+      allState.sortDir = allState.sortDir === 'asc' ? 'desc' : 'asc';
     } else {
-      state.sortBy = key;
-      state.sortDir = 'asc';
+      allState.sortBy = key;
+      allState.sortDir = 'asc';
     }
     const dd = document.getElementById('sortBy');
-    const optVal = state.sortDir === 'asc' ? state.sortBy : state.sortBy + '-desc';
+    const optVal = allState.sortDir === 'asc' ? allState.sortBy : allState.sortBy + '-desc';
     if ([...dd.options].some(o => o.value === optVal)) dd.value = optVal;
-    render();
+    renderAll();
   });
 });
 
-render();
+// Popular tab events
+document.getElementById('popularFilterContext').addEventListener('change', e => {
+  popState.filterContext = parseInt(e.target.value);
+  renderPopular();
+});
+document.getElementById('popularSortBy').addEventListener('change', e => {
+  const v = e.target.value;
+  const parts = v.split('-');
+  popState.sortBy = parts[0];
+  popState.sortDir = parts[1] === 'desc' ? 'desc' : 'asc';
+  renderPopular();
+});
+
+// Popular tab column header click sorting
+document.querySelectorAll('#tabPopular th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (popState.sortBy === key) {
+      popState.sortDir = popState.sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      popState.sortBy = key;
+      popState.sortDir = 'asc';
+    }
+    const dd = document.getElementById('popularSortBy');
+    const optVal = popState.sortDir === 'asc' ? popState.sortBy : popState.sortBy + '-desc';
+    if ([...dd.options].some(o => o.value === optVal)) dd.value = optVal;
+    renderPopular();
+  });
+});
+
+renderAll();

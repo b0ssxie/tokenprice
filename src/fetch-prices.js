@@ -86,7 +86,7 @@ async function main() {
   console.log(`Fetched ${models.length} models`);
 
   const data = models
-    .filter(m => m.pricing && m.pricing.prompt)
+    .filter(m => m.pricing && m.pricing.prompt && parseFloat(m.pricing.prompt) >= 0 && parseFloat(m.pricing.completion) >= 0)
     .map(m => ({
       id: m.id,
       name: m.name || m.id,

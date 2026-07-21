@@ -14,3 +14,5 @@ Task 6: complete (commit ae4226c, workflow updated)
 
 Task 7: complete (build verified — 3 output files, 338 models)
 
+Task 8: pushed to GitHub (push only — workflow trigger blocked by network)
+
