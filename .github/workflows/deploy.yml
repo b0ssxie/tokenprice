@@ -19,19 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
+          cache: npm
       - name: 安装依赖
-        run: npm install
-
-      - name: 抓取数据并生成页面
+        run: npm ci
+      - name: 抓取数据并构建
         run: npm run build
-        env:
-          NODE_ENV: production
-
       - name: 上传 Pages 产物
         uses: actions/upload-pages-artifact@v3
         with:
