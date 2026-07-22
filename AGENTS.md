@@ -11,9 +11,8 @@ npm run build    # fetch-prices.js → models.json → vite build
 
 ## Architecture
 
-- Single-page app, no framework. Entry: `index.html` → `src/main.js` imports `style.css`, `models.json`, `plans.json`
+- Single-page app, no framework. Entry: `index.html` → `src/main.js` imports `style.css`, `models.json`
 - `src/fetch-prices.js` — ESM script, fetches OpenRouter API, writes `src/data/models.json`. Filtered: models with negative pricing (prompt/completion < 0) excluded. Price per million tokens computed from per-token API values. `models.json` is committed to git (not gitignored).
-- `src/data/plans.json` — manually maintained, not auto-generated
 - `vite.config.js` — `base: '/tokenprice/'` (required for GitHub Pages subpath)
 
 ## Deploy

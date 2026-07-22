@@ -1,6 +1,6 @@
 import './style.css';
 import modelsData from './data/models.json';
-import plansData from './data/plans.json';
+
 
 const POPULAR = [...modelsData]
   .filter(m => parseFloat(m.avg) > 0)
@@ -238,17 +238,5 @@ document.querySelectorAll('#tabPopular th[data-sort]').forEach(th => {
     renderPopular();
   });
 });
-
-// Render plans
-const plansContainer = document.getElementById('plansContainer');
-plansContainer.innerHTML = plansData.map(p => `
-  <div class="plan${p.featured ? ' featured' : ''}">
-    <div class="plan-name">${p.name}</div>
-    <div class="plan-price"><span class="price-num">${p.price}</span></div>
-    <div class="plan-models">${p.models}</div>
-    <div class="plan-extra">${p.extra}</div>
-    <a class="plan-link" href="${p.link}" target="_blank" rel="noopener">${p.linkText}</a>
-  </div>
-`).join('');
 
 renderAll();
