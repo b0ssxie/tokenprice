@@ -56,7 +56,8 @@ function formatPrice(priceStr) {
   if (!priceStr) return '-';
   const num = parseFloat(priceStr);
   if (isNaN(num)) return '-';
-  return (num * 1000000).toFixed(4);
+  const s = (num * 1000000).toFixed(6);
+  return s.replace(/\.?0+$/, '');
 }
 
 function formatDate(ts) {
@@ -94,9 +95,11 @@ async function main() {
       inputPrice: formatPrice(m.pricing.prompt),
       outputPrice: formatPrice(m.pricing.completion),
       avg: (() => {
-        const i = parseFloat(formatPrice(m.pricing.prompt));
-        const o = parseFloat(formatPrice(m.pricing.completion));
-        return isNaN(i) || isNaN(o) ? '0.0000' : ((i + o) / 2).toFixed(4);
+        const i = parseFloat(m.pricing.prompt) * 1000000;
+        const o = parseFloat(m.pricing.completion) * 1000000;
+        if (isNaN(i) || isNaN(o)) return '0';
+        const s = ((i + o) / 2).toFixed(6);
+        return s.replace(/\.?0+$/, '');
       })(),
       contextLength: m.context_length || 0,
       contextLabel: (() => {

@@ -2,17 +2,10 @@ import './style.css';
 import modelsData from './data/models.json';
 import plansData from './data/plans.json';
 
-const POPULAR_IDS = [
-  'openai/gpt-4o', 'openai/gpt-4o-mini', 'openai/o3', 'openai/o4-mini',
-  'anthropic/claude-sonnet-4', 'anthropic/claude-sonnet-4.5', 'anthropic/claude-sonnet-4.6',
-  'google/gemini-2.5-pro', 'google/gemini-2.5-flash',
-  'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
-  'mistralai/mistral-large-2512', 'mistralai/mistral-small-3.1-24b-instruct',
-  'cohere/command-r-plus-08-2024', 'cohere/command-r-08-2024',
-  'qwen/qwen-2.5-72b-instruct', 'meta-llama/llama-3.1-70b-instruct',
-];
-
-const POPULAR = modelsData.filter(m => POPULAR_IDS.includes(m.id));
+const POPULAR = [...modelsData]
+  .filter(m => parseFloat(m.avg) > 0)
+  .sort((a, b) => b.created - a.created)
+  .slice(0, 20);
 
 function priceClass(val) {
   const n = parseFloat(val);
@@ -66,6 +59,10 @@ function renderTableBody(data, tbodyId, badgeId, sortBy, sortDir, showCreated) {
   if (badgeId) document.getElementById(badgeId).textContent = `${sorted.length} 个模型`;
 
   const tbody = document.getElementById(tbodyId);
+  if (sorted.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-muted);font-size:14px;">无匹配模型</td></tr>`;
+    return;
+  }
   tbody.innerHTML = sorted.map((m, i) => {
     const avgClass = priceClass(m.avg);
     const platformClass = getPlatformClass(m.platform);
