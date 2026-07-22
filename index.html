@@ -39,35 +39,6 @@
     <button class="tab" data-tab="popular">热门</button>
   </nav>
 
-  <div class="controls">
-    <div class="control-group">
-      <select id="filterPlatform">
-        <option value="全部">平台: 全部</option>
-      </select>
-      <select id="filterContext">
-        <option value="0">上下文: 不限</option>
-        <option value="8192">8K+</option>
-        <option value="16384">16K+</option>
-        <option value="32768">32K+</option>
-        <option value="65536">64K+</option>
-        <option value="131072">128K+</option>
-        <option value="1048576">1M+</option>
-      </select>
-      <select id="sortBy">
-        <option value="avg">排序: 均价 ↑</option>
-        <option value="avg-desc">均价 ↓</option>
-        <option value="contextLength">上下文 ↑</option>
-        <option value="contextLength-desc">上下文 ↓</option>
-        <option value="name">名称 A-Z</option>
-        <option value="name-desc">名称 Z-A</option>
-        <option value="created">最新</option>
-        <option value="created-desc">最旧</option>
-      </select>
-      <input type="search" id="search" placeholder="搜索模型名称或 ID...">
-    </div>
-    <span class="stats-badge" id="statsBadge">0 个模型</span>
-  </div>
-
   <div class="tab-content" id="tabAll">
     <div class="controls">
       <div class="control-group">
@@ -83,16 +54,8 @@
           <option value="131072">128K+</option>
           <option value="1048576">1M+</option>
         </select>
-        <select id="sortBy">
-          <option value="avg">排序: 均价 ↑</option>
-          <option value="avg-desc">均价 ↓</option>
-          <option value="contextLength">上下文 ↑</option>
-          <option value="contextLength-desc">上下文 ↓</option>
-          <option value="name">名称 A-Z</option>
-          <option value="name-desc">名称 Z-A</option>
-          <option value="created">最新</option>
-          <option value="created-desc">最旧</option>
-        </select>
+        <label class="toggle-label"><input type="checkbox" id="hideFree" checked> 隐藏免费</label>
+        <button type="button" class="currency-btn" id="currencyBtn" title="切换货币">USD</button>
         <input type="search" id="search" placeholder="搜索模型名称或 ID...">
       </div>
       <span class="stats-badge" id="statsBadge">0 个模型</span>
@@ -104,8 +67,8 @@
           <tr>
             <th data-sort="name">模型 <span class="sort-arrow">▼</span></th>
             <th data-sort="platform">平台 <span class="sort-arrow">▼</span></th>
-            <th data-sort="inputPrice" class="num">输入价/百万 <span class="sort-arrow">▼</span></th>
-            <th data-sort="outputPrice" class="num">输出价/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="inputPrice" class="num">输入/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="outputPrice" class="num">输出/百万 <span class="sort-arrow">▼</span></th>
             <th data-sort="avg" class="num sorted">均价/百万 <span class="sort-arrow">▲</span></th>
             <th data-sort="contextLength" class="num">上下文 <span class="sort-arrow">▼</span></th>
             <th data-sort="modality" class="center">模态 <span class="sort-arrow">▼</span></th>
@@ -129,14 +92,7 @@
           <option value="131072">128K+</option>
           <option value="1048576">1M+</option>
         </select>
-        <select id="popularSortBy">
-          <option value="avg">排序: 均价 ↑</option>
-          <option value="avg-desc">均价 ↓</option>
-          <option value="contextLength">上下文 ↑</option>
-          <option value="contextLength-desc">上下文 ↓</option>
-          <option value="name">名称 A-Z</option>
-          <option value="name-desc">名称 Z-A</option>
-        </select>
+        <button type="button" class="currency-btn" id="popularCurrencyBtn" title="切换货币">USD</button>
       </div>
       <span class="stats-badge" id="popularStatsBadge">0 个模型</span>
     </div>
@@ -147,8 +103,8 @@
           <tr>
             <th data-sort="name">模型 <span class="sort-arrow">▼</span></th>
             <th data-sort="platform">平台 <span class="sort-arrow">▼</span></th>
-            <th data-sort="inputPrice" class="num">输入价/百万 <span class="sort-arrow">▼</span></th>
-            <th data-sort="outputPrice" class="num">输出价/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="inputPrice" class="num">输入/百万 <span class="sort-arrow">▼</span></th>
+            <th data-sort="outputPrice" class="num">输出/百万 <span class="sort-arrow">▼</span></th>
             <th data-sort="avg" class="num sorted">均价/百万 <span class="sort-arrow">▲</span></th>
             <th data-sort="contextLength" class="num">上下文 <span class="sort-arrow">▼</span></th>
             <th data-sort="modality" class="center">模态 <span class="sort-arrow">▼</span></th>
@@ -160,7 +116,7 @@
   </div>
 
   <footer>
-    <p>Data from <a href="https://openrouter.ai" target="_blank">OpenRouter</a> · 每日自动更新</p>
+    <p>Data from <a href="https://openrouter.ai" target="_blank">OpenRouter</a> · 每日自动更新 · 汇率按 1 USD = 7.2 CNY</p>
   </footer>
 </div>
 <script type="module" src="/src/main.js"></script>

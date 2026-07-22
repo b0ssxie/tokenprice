@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const OUT = path.resolve(__dirname, 'data', 'models.json');
 
 const PLATFORM_MAP = {
   'openai': 'OpenAI',
@@ -48,16 +49,13 @@ function guessPlatform(modelId) {
   for (const [key, label] of Object.entries(PLATFORM_MAP)) {
     if (lower.startsWith(key)) return label;
   }
-  const parts = modelId.split('/');
-  return parts[0] || '其他';
+  return modelId.split('/')[0] || '其他';
 }
 
-function formatPrice(priceStr) {
-  if (!priceStr) return '-';
+function perMillion(priceStr) {
   const num = parseFloat(priceStr);
-  if (isNaN(num)) return '-';
-  const s = (num * 1000000).toFixed(6);
-  return s.replace(/\.?0+$/, '');
+  if (isNaN(num)) return 0;
+  return Math.round(num * 1e6 * 1e6) / 1e6;
 }
 
 function formatDate(ts) {
@@ -69,9 +67,14 @@ function formatDate(ts) {
 function getModalityText(modality) {
   if (!modality) return 'text';
   if (modality === 'text->text') return 'text';
-  if (modality.includes('image')) return '多模态';
-  if (modality.includes('audio')) return '多模态';
+  if (modality.includes('image') || modality.includes('audio')) return '多模态';
   return 'text';
+}
+
+function contextLabel(ctx) {
+  if (ctx >= 1000000) return `${(ctx / 1000000).toFixed(1)}M`;
+  if (ctx >= 1000) return `${(ctx / 1000).toFixed(0)}K`;
+  return String(ctx);
 }
 
 async function fetchModels() {
@@ -87,40 +90,37 @@ async function main() {
   console.log(`Fetched ${models.length} models`);
 
   const data = models
-    .filter(m => m.pricing && m.pricing.prompt && parseFloat(m.pricing.prompt) >= 0 && parseFloat(m.pricing.completion) >= 0)
-    .map(m => ({
-      id: m.id,
-      name: m.name || m.id,
-      platform: guessPlatform(m.id),
-      inputPrice: formatPrice(m.pricing.prompt),
-      outputPrice: formatPrice(m.pricing.completion),
-      avg: (() => {
-        const i = parseFloat(m.pricing.prompt) * 1000000;
-        const o = parseFloat(m.pricing.completion) * 1000000;
-        if (isNaN(i) || isNaN(o)) return '0';
-        const s = ((i + o) / 2).toFixed(6);
-        return s.replace(/\.?0+$/, '');
-      })(),
-      contextLength: m.context_length || 0,
-      contextLabel: (() => {
-        const ctx = m.context_length || 0;
-        return ctx >= 1000000 ? `${(ctx / 1000000).toFixed(1)}M`
-          : ctx >= 1000 ? `${(ctx / 1000).toFixed(0)}K`
-          : String(ctx);
-      })(),
-      created: m.created || 0,
-      createdLabel: formatDate(m.created),
-      modality: getModalityText(m.architecture?.modality),
-    }))
-    .sort((a, b) => parseFloat(a.avg) - parseFloat(b.avg));
+    .filter(m => m.pricing && m.pricing.prompt != null && parseFloat(m.pricing.prompt) >= 0 && parseFloat(m.pricing.completion) >= 0)
+    .map(m => {
+      const inputPrice = perMillion(m.pricing.prompt);
+      const outputPrice = perMillion(m.pricing.completion);
+      const ctx = m.context_length || 0;
+      return {
+        id: m.id,
+        name: m.name || m.id,
+        platform: guessPlatform(m.id),
+        inputPrice,
+        outputPrice,
+        avg: Math.round(((inputPrice + outputPrice) / 2) * 1e6) / 1e6,
+        contextLength: ctx,
+        contextLabel: contextLabel(ctx),
+        created: m.created || 0,
+        createdLabel: formatDate(m.created),
+        modality: getModalityText(m.architecture?.modality),
+      };
+    })
+    .sort((a, b) => a.avg - b.avg);
 
-  const outDir = path.resolve(__dirname, 'data');
-  fs.mkdirSync(outDir, { recursive: true });
-  fs.writeFileSync(path.join(outDir, 'models.json'), JSON.stringify(data, null, 2), 'utf-8');
+  fs.mkdirSync(path.dirname(OUT), { recursive: true });
+  fs.writeFileSync(OUT, JSON.stringify(data), 'utf-8');
   console.log(`Written ${data.length} models to src/data/models.json`);
 }
 
 main().catch(err => {
-  console.error('Error:', err);
+  console.error('Fetch failed:', err.message);
+  if (fs.existsSync(OUT)) {
+    console.warn('Using existing models.json');
+    process.exit(0);
+  }
   process.exit(1);
 });
